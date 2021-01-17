@@ -1,8 +1,10 @@
-# Project 1: Report
+# Project 2: Report
 
 ### Implementation
 
-The solution is implemented as a Deep-Q Network with experience replay and fixed Q-targets. The `Agent` class defines an agent that can uses data about the environment's state to choose an action and then learn from its experience. The `QNetwork` class defines the deep neural network that informs the agent's choices. The `ReplayBuffer` class stores past experiences that the agent samples from to update the model parameters. The `play_dqn()` function trains the agent and outputs scores for each episode.
+The solution is implemented as a ...
+
+Deep-Q Network with experience replay and fixed Q-targets. The `Agent` class defines an agent that can uses data about the environment's state to choose an action and then learn from its experience. The `QNetwork` class defines the deep neural network that informs the agent's choices. The `ReplayBuffer` class stores past experiences that the agent samples from to update the model parameters. The `play_dqn()` function trains the agent and outputs scores for each episode.
 
 ### Learning Algorithm
 
