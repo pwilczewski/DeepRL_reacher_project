@@ -13,7 +13,7 @@ My solution was coded using Python version 3.6.12, PyTorch version 0.4.0 and Ope
 
 1. The requirements for running my solution are available in the Udacity [DRLND GitHub repository](https://github.com/udacity/deep-reinforcement-learning#dependencies). These instructions can be found in `README.md` at the root of the repository.
 
-2. Additionally you will need to download the One Agent environment. My solution was created using Windows (64-bit).
+2. Additionally you will need to download the One Agent environment. My solution was created on a Windows (64-bit) machine and trained using a CPU.
 
     - Windows (64-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P2/Reacher/one_agent/Reacher_Windows_x86_64.zip)
 
