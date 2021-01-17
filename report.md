@@ -1,55 +1,25 @@
-[//]: # (Image References)
+# Project 1: Report
 
-[image1]: https://user-images.githubusercontent.com/10624937/42135619-d90f2f28-7d12-11e8-8823-82b970a54d7e.gif "Trained Agent"
+### Implementation
 
-# Project 1: Navigation
+The solution is implemented as a Deep-Q Network with experience replay and fixed Q-targets. The `Agent` class defines an agent that can uses data about the environment's state to choose an action and then learn from its experience. The `QNetwork` class defines the deep neural network that informs the agent's choices. The `ReplayBuffer` class stores past experiences that the agent samples from to update the model parameters. The `play_dqn()` function trains the agent and outputs scores for each episode.
 
-### Introduction
+### Learning Algorithm
 
-For this project, you will train an agent to navigate (and collect bananas!) in a large, square world.  
+The purpose of the learning algorithm is to parameterize a deep neural network that approximates the action-value (Q-value) function for the agent in the Banana environment. After initialization the agent interacts with the environment over a series of episodes. In each episode the agent considers the state of the environment, takes actions and receives rewards. Using this data over many episodes the agent updates its estimate of the action-value for each possible action given data about the state of the environment. 
 
-![Trained Agent][image1]
+The agent interacts with the environment by taking epsilon-greedy actions. Initially it acts randomly with `epsilon = 1` but this value decays geometrically at a rate of 1% per episode until reaching a floor of `min(epsilon, 0.01)`. Each action updates the state of the environment and returns some reward. Then each experience observed by the agent is stored in the replay buffer. Every 4 steps through the environment the agent samples 64 experiences from the replay buffer and updates the parameters of the deep neural network.
 
-A reward of +1 is provided for collecting a yellow banana, and a reward of -1 is provided for collecting a blue banana.  Thus, the goal of your agent is to collect as many yellow bananas as possible while avoiding blue bananas.  
+To update the network parameters the agent uses stochastic gradient descent with the Adam optimizer and a learning rate equal to `0.001`. The agent's objective is to minimize the mean squared error between the action values predicted by the network (Q_expected) and an estimate of the true action values (Q_targets). The true action values (Q_targets) are estimated as the current reward plus the value of future expected rewards, discounted by `gamma = 0.99`. To reduce the correlation between the target and the model parameters, the agent uses fixed Q-targets and stores two copies of the deep neural network. The first `qnetwork_local` is used to predict the action values for the current state and the second `qnetwork_target` is used to estimate the true action values that are used as targets. After calculating the gradient of the error the optimizer takes a step in the direction of the gradient and updates the parameters of the `qnetwork_local` network. Then the agent updates the parameters of the `qnetwork_target` network as a weighted-average of the two networks with `tau = 0.001`.
 
-The state space has 37 dimensions and contains the agent's velocity, along with ray-based perception of objects around agent's forward direction.  Given this information, the agent has to learn how to best select actions.  Four discrete actions are available, corresponding to:
-- **`0`** - move forward.
-- **`1`** - move backward.
-- **`2`** - turn left.
-- **`3`** - turn right.
+The deep neural network takes a state of size 37 as input. The first layer contains 8 nodes with ReLU activation and the second layer contains 16 nodes with ReLU activation. The network outputs four action values using ReLU activation. In total this architecture contains 516 parameters.
 
-The task is episodic, and in order to solve the environment, your agent must get an average score of +13 over 100 consecutive episodes.
+### Plot of Rewards
 
-### Getting Started
+After 555 episodes, the successful agent was able to achieve an average score of +13 over its last 100 episodes.
 
-1. Download the environment from one of the links below.  You need only select the environment that matches your operating system:
-    - Linux: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Linux.zip)
-    - Mac OSX: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana.app.zip)
-    - Windows (32-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Windows_x86.zip)
-    - Windows (64-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Windows_x86_64.zip)
-    
-    (_For Windows users_) Check out [this link](https://support.microsoft.com/en-us/help/827218/how-to-determine-whether-a-computer-is-running-a-32-bit-version-or-64) if you need help with determining if your computer is running a 32-bit version or 64-bit version of the Windows operating system.
+![Scores](score_history.png)
 
-    (_For AWS_) If you'd like to train the agent on AWS (and have not [enabled a virtual screen](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Training-on-Amazon-Web-Service.md)), then please use [this link](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/Banana_Linux_NoVis.zip) to obtain the environment.
+### Ideas for Future Work
 
-2. Place the file in the DRLND GitHub repository, in the `p1_navigation/` folder, and unzip (or decompress) the file. 
-
-### Instructions
-
-Follow the instructions in `Navigation.ipynb` to get started with training your own agent!  
-
-### (Optional) Challenge: Learning from Pixels
-
-After you have successfully completed the project, if you're looking for an additional challenge, you have come to the right place!  In the project, your agent learned from information such as its velocity, along with ray-based perception of objects around its forward direction.  A more challenging task would be to learn directly from pixels!
-
-To solve this harder task, you'll need to download a new Unity environment.  This environment is almost identical to the project environment, where the only difference is that the state is an 84 x 84 RGB image, corresponding to the agent's first-person view.  (**Note**: Udacity students should not submit a project with this new environment.)
-
-You need only select the environment that matches your operating system:
-- Linux: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/VisualBanana_Linux.zip)
-- Mac OSX: [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/VisualBanana.app.zip)
-- Windows (32-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/VisualBanana_Windows_x86.zip)
-- Windows (64-bit): [click here](https://s3-us-west-1.amazonaws.com/udacity-drlnd/P1/Banana/VisualBanana_Windows_x86_64.zip)
-
-Then, place the file in the `p1_navigation/` folder in the DRLND GitHub repository, and unzip (or decompress) the file.  Next, open `Navigation_Pixels.ipynb` and follow the instructions to learn how to use the Python API to control the agent.
-
-(_For AWS_) If you'd like to train the agent on AWS, you must follow the instructions to [set up X Server](https://github.com/Unity-Technologies/ml-agents/blob/master/docs/Training-on-Amazon-Web-Service.md), and then download the environment for the **Linux** operating system above.
+One idea for future work is to test alternative network architecures. Additional nodes or additional layers could improve the agent's performance by utilizing more data from the environment. Another idea for future work is to test feature engineering. For example including data about the distance from corners and walls may help the agent learn to collect bananas faster.
