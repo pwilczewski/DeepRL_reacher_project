@@ -21,7 +21,7 @@ class Actor(nn.Module):
 # Neural network for Critic model, mapping states/actions to Q-values
 class Critic(nn.Module):
 
-    def __init__(self, state_size, action_size, seed, fc1_units=128, fc2_units=64, fc3_units=32):
+    def __init__(self, state_size, action_size, seed, fc1_units=128, fc2_units=64):
         super(Critic, self).__init__()
         self.seed = torch.manual_seed(seed)
         self.fc1 = nn.Linear(state_size, fc1_units)
