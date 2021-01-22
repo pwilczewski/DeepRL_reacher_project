@@ -17,7 +17,6 @@ GAMMA = 0.99
 TAU = 1e-3
 LR_ACTOR = 1e-4
 LR_CRITIC = 3e-4
-WEIGHT_DECAY = 0
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -36,7 +35,7 @@ class Agent():
         # Critic Network
         self.critic_local = Critic(state_size, action_size, random_seed).to(device)
         self.critic_target = Critic(state_size, action_size, random_seed).to(device)
-        self.critic_optimizer = optim.Adam(self.critic_local.parameters(), lr=LR_CRITIC, weight_decay=WEIGHT_DECAY)
+        self.critic_optimizer = optim.Adam(self.critic_local.parameters(), lr=LR_CRITIC)
 
         # Time step for when to update
         self.t_step = 0
